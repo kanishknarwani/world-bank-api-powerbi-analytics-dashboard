@@ -355,4 +355,4 @@ python project3.py
 B.Com | Masters in Applied Statistics and Informatics
 Gokhale Institute of Politics and Economics, Pune
 
-[GitHub](https://github.com/kanishknarwani) | [LinkedIn](https://linkedin.com/in/yourusername)
+[GitHub](https://github.com/kanishknarwani) | [LinkedIn](https://linkedin.com/in/kanishk-narwani)
