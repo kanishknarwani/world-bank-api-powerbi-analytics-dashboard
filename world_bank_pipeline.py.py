@@ -6,67 +6,42 @@ import time #We imported time bcoz when we run our loop, we send request like fo
 url = "https://api.worldbank.org/countries?format=json&per_page=300"
 
 response = requests.get(url)
-# print(response.status_code)
+print(response.status_code)
 data = response.json()
-# print(data)
-# print(data[0]) #For getting information of data also called metadata.
-# print(len(data)) 
+print(data)
+print(data[0]) #For getting information of data also called metadata.
+print(len(data)) 
 
 countries = data[1]
 countries = pd.DataFrame(countries)
-# print(countries)
-# print(countries["region"][0])
+print(countries)
+print(countries["region"][0])
 
-#We will clean data now. Such as droping adminregion and capitalcity futher we will clean region, incomeLevel, and lendingType.
+# Data cleaning: Drop 'adminregion' and 'capitalcity'; extract nested values from 'region', 'incomeLevel', and 'lendingType'.
 
 countries["region"] = countries["region"].apply(lambda x:x["value"])
-# print(countries["region"])
+print(countries["region"])
 
 countries["incomeLevel"] = countries["incomeLevel"].apply(lambda x:x["value"])
-# print(countries["incomeLevel"])
+print(countries["incomeLevel"])
 
 countries["lendingType"] = countries["lendingType"].apply(lambda x:x["value"])
-# print(countries["lendingType"])
+print(countries["lendingType"])
 
 countries.drop(columns=["adminregion", "capitalCity"], inplace=True) #This inplace = True, modifies the existing data frame rather than creating a new one.
-
-# print(countries["region"].unique()) #To check which all countries are present in our dataset
-
-# print(countries[countries["region"]=="Aggregates"])
+print(countries["region"].unique()) #To check which all countries are present in our dataset
+print(countries[countries["region"]=="Aggregates"])
 
 #--------------code for indicators--------------
 base_url = "https://api.worldbank.org/v2/indicators?format=json" # Initial url "https://api.worldbank.org/countries/USA/indicators" v2 means passing the information of that particular region where it is used and the output passes on to next information. question mark means to get complete information of that particular parameter after which question mark is placed.
 response = requests.get(base_url)
-# print(response.status_code) #If this output is 200 that indicates that connection is estabilished; 200 is the standardized HTTP code for “success”.
+print(response.status_code) #If this output is 200 that indicates that connection is estabilished; 200 is the standardized HTTP code for “success”.
 
 indicators_data = response.json() # To bring response in json mode.
 
-#print(indicators_data[0]) #Here 0 means (Metadata about the request) and 1 means (Actual indicator data).
-#print(pd.DataFrame(indicators_data[1]))
-'''
-all_dfs=[]
-for i in range(1, 526):
-    url = f"https://api.worldbank.org/v2/indicators?format=json&per_page=500&page={i}" 
-    response = requests.get(url)
+print(indicators_data[0]) #Here 0 means (Metadata about the request) and 1 means (Actual indicator data).
+print(pd.DataFrame(indicators_data[1]))
 
-    if response.status_code==200:
-        data=response.json()
-
-        if len(data)<2:
-            print(f"No data at page{i}")
-
-        indicators=data[1]
-        df = pd.DataFrame([{"id": item["id"],
-                        "name": item["name"]} for item in indicators])
-        all_dfs.append(df)
-        print(f"Page{i}: {len(df)} indicators collected")
-
-    else:
-        print(f"Failed to fetch page{i}, status_code {response.status_code}")
-
-final_df = pd.concat(all_dfs, ignore_index=True)
-final_df.to_csv("final_df.csv")
-'''
 RUN_API = False
 
 if RUN_API:
@@ -101,9 +76,10 @@ else:
 To check if above code is working or not 
 print("Rows:", len(final_df))
 print("Columns:", final_df.columns.tolist())
-print(final_df.head()) '''
+print(final_df.head()) 
+'''
 
-#We will extract values for various indicators under the domain for each country 
+# Extract values for various indicators under the domain for each country 
 
 indicators_group = {
     "economic_activity_growth": [
@@ -154,12 +130,10 @@ indicators_group = {
 base_url = f"https://api.worldbank.org/countries/all/indicators/IT.CEL.SETS.P2?format=json"
 
 response = requests.get(base_url)
-# print(response.json()[0])
-
+print(response.json()[0])
     
 base_url = "https://api.worldbank.org/countries/all/indicators/{}?format=json&per_page=1000&page={}"
 
-'''
 category_dataframes = {}
    
 for category, indicators in indicators_group.items():
@@ -245,7 +219,7 @@ poverty.drop(columns=["indicator_id", "name", "id"], inplace=True)
 environment.drop(columns=["indicator_id", "name", "id"], inplace=True)
 health.drop(columns=["indicator_id", "name", "id"], inplace=True)
 technology.drop(columns=["indicator_id", "name", "id"], inplace=True)
-'''
+
 print(health)
 
 df_wide = health.pivot_table(index = ["country_value", "year"],
