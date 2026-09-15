@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import requests
-import time #We imported time bcoz when we run our loop, we send request like for 346 pages we send req 346 times by doing this our API may consider us a chatbot and it blocks our requests. So to ensure this we use time like 2sec or 3 sec delay between each req and 
+import time #We imported time because when we run our loop, we send request like for 346 pages we send req 346 times by doing this our API may consider us a chatbot and it blocks our requests. So to ensure this we use time like 0.2 seconds or 0.3 seconds delay between each req and 
 
 url = "https://api.worldbank.org/countries?format=json&per_page=300"
 
